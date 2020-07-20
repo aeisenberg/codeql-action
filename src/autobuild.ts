@@ -6,6 +6,8 @@ import * as util from './util';
 
 async function run() {
   try {
+    util.prepareEnvironment();
+
     if (util.should_abort('autobuild', true) || !await util.reportActionStarting('autobuild')) {
       return;
     }

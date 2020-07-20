@@ -137,6 +137,8 @@ async function run() {
   let codeql: CodeQL;
 
   try {
+    util.prepareEnvironment();
+
     if (util.should_abort('init', false) || !await util.reportActionStarting('init')) {
       return;
     }

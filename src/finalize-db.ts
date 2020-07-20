@@ -61,9 +61,12 @@ async function runQueries(databaseFolder: string, sarifFolder: string, config: c
 
 async function run() {
   try {
+    util.prepareEnvironment();
+
     if (util.should_abort('finish', true) || !await util.reportActionStarting('finish')) {
       return;
     }
+
     const config = await configUtils.getConfig();
 
     core.exportVariable(sharedEnv.ODASA_TRACER_CONFIGURATION, '');
@@ -80,7 +83,7 @@ async function run() {
     core.info('Analyzing database');
     await runQueries(databaseFolder, sarifFolder, config);
 
-    if ('true' === core.getInput('upload')) {
+    if ('true' === core.getInput('upload') && !util.isLocalRun()) {
       if (!await upload_lib.upload(sarifFolder)) {
         await util.reportActionFailed('finish', 'upload');
         return;

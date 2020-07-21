@@ -60,9 +60,6 @@ export function prepareEnvironment() {
   }
 
   core.debug('Action is running locally.');
-  if (!process.env.RUNNER_TEMP) {
-    core.exportVariable('RUNNER_TEMP', path.join(os.tmpdir(), 'codeql-action', String(Date.now())));
-  }
   if (!process.env.GITHUB_JOB) {
     core.exportVariable('GITHUB_JOB', 'UNKNOWN-JOB');
   }
@@ -257,16 +254,18 @@ async function createStatusReport(
 /**
  * Send a status report to the code_scanning/analysis/status endpoint.
  *
+ * This avoids sending status reports for local runs.
+ *
  * Returns the status code of the response to the status request.
  */
 async function sendStatusReport(statusReport: StatusReport): Promise<number> {
+  const statusReportJSON = JSON.stringify(statusReport);
+  core.debug('Sending status report: ' + statusReportJSON);
+
   if (isLocalRun()) {
+    core.debug('Status report not sent for local runs.');
     return 200;
   }
-
-  const statusReportJSON = JSON.stringify(statusReport);
-
-  core.debug('Sending status report: ' + statusReportJSON);
 
   const nwo = getRequiredEnvParam("GITHUB_REPOSITORY");
   const [owner, repo] = nwo.split("/");

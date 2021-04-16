@@ -10,6 +10,7 @@ import { isScannedLanguage, Language } from "./languages";
 import { Logger } from "./logging";
 import * as sharedEnv from "./shared-environment";
 import * as util from "./util";
+import { countLoc } from "./count-loc";
 
 export class CodeQLAnalysisError extends Error {
   queriesStatusReport: QueriesStatusReport;
@@ -47,6 +48,18 @@ export interface QueriesStatusReport {
   analyze_custom_queries_javascript_duration_ms?: number;
   // Time taken in ms to analyze custom queries for python (or undefined if this language was not analyzed)
   analyze_custom_queries_python_duration_ms?: number;
+  // Baseline lines of code calculated by the action if cpp was analyzed
+  baseline_cpp_loc?: number;
+  // Baseline lines of code calculated by the action if csharp was analyzed
+  baseline_csharp_loc?: number;
+  // Baseline lines of code calculated by the action if go was analyzed
+  baseline_go_loc?: number;
+  // Baseline lines of code calculated by the action if java was analyzed
+  baseline_java_loc?: number;
+  // Baseline lines of code calculated by the action if javascript was analyzed
+  baseline_javascript_loc?: number;
+  // Baseline lines of code calculated by the action if python was analyzed
+  baseline_python_loc?: number;
   // Name of language that errored during analysis (or undefined if no language failed)
   analyze_failure_language?: string;
 }
@@ -143,6 +156,15 @@ export async function runQueries(
 ): Promise<QueriesStatusReport> {
   const statusReport: QueriesStatusReport = {};
 
+  // count the number of lines in the background
+  const locPromise = countLoc(
+    path.resolve(),
+    config.paths,
+    config.pathsIgnore,
+    config.languages,
+    logger
+  );
+
   for (const language of config.languages) {
     logger.startGroup(`Analyzing ${language}`);
 
@@ -204,6 +226,12 @@ export async function runQueries(
         `Error running analysis for ${language}: ${e}`
       );
     }
+  }
+
+  // finally, need to add the results to the status report.
+  const locResults = await locPromise;
+  for (const [language, count] of Object.entries(locResults)) {
+    statusReport[`baseline_${language}_loc`] = count;
   }
 
   return statusReport;

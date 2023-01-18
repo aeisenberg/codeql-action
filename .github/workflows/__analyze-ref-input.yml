@@ -26,41 +26,11 @@ jobs:
     strategy:
       matrix:
         include:
-        - os: ubuntu-20.04
-          version: stable-20211005
-        - os: macos-latest
-          version: stable-20211005
-        - os: windows-2019
-          version: stable-20211005
-        - os: ubuntu-20.04
-          version: stable-20220120
-        - os: macos-latest
-          version: stable-20220120
-        - os: windows-2019
-          version: stable-20220120
         - os: ubuntu-latest
-          version: stable-20220401
-        - os: macos-latest
-          version: stable-20220401
-        - os: windows-latest
-          version: stable-20220401
-        - os: ubuntu-latest
-          version: cached
-        - os: macos-latest
-          version: cached
-        - os: windows-latest
           version: cached
         - os: ubuntu-latest
           version: latest
-        - os: macos-latest
-          version: latest
-        - os: windows-latest
-          version: latest
         - os: ubuntu-latest
-          version: nightly-latest
-        - os: macos-latest
-          version: nightly-latest
-        - os: windows-latest
           version: nightly-latest
     name: "Analyze: 'ref' and 'sha' from inputs"
     timeout-minutes: 45

@@ -27,11 +27,7 @@ jobs:
       matrix:
         include:
         - os: ubuntu-latest
-          version: cached
-        - os: ubuntu-latest
           version: latest
-        - os: ubuntu-latest
-          version: nightly-latest
     name: "Analyze: 'ref' and 'sha' from inputs"
     timeout-minutes: 45
     runs-on: ${{ matrix.os }}

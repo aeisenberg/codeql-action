@@ -855,7 +855,8 @@ async function getCodeQLForCmd(
       config: Config,
       sourceRoot: string,
       processName: string | undefined,
-      featureEnablement: FeatureEnablement
+      featureEnablement: FeatureEnablement,
+      logger: Logger
     ) {
       const extraArgs = config.languages.map(
         (language) => `--language=${language}`
@@ -1386,7 +1387,8 @@ async function runTool(
 async function generateCodeScanningConfig(
   codeql: CodeQL,
   config: Config,
-  featureEnablement: FeatureEnablement
+  featureEnablement: FeatureEnablement,
+  logger: Logger
 ): Promise<string | undefined> {
   if (!(await util.useCodeScanningConfigInCli(codeql, featureEnablement))) {
     return;
@@ -1448,6 +1450,14 @@ async function generateCodeScanningConfig(
       augmentedConfig.packs["javascript"].push(packString);
     }
   }
+  logger.startGroup("Original user configuration file");
+  logger.info(yaml.dump(config.originalUserInput));
+  logger.endGroup();
+
+  logger.info(`Writing user configuration file to ${configLocation}`);
+  logger.startGroup("Writing user configuration file");
+  logger.info(yaml.dump(augmentedConfig));
+  logger.endGroup();
 
   fs.writeFileSync(configLocation, yaml.dump(augmentedConfig));
   return configLocation;

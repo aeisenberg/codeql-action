@@ -889,7 +889,8 @@ async function getCodeQLForCmd(
       const configLocation = await generateCodeScanningConfig(
         codeql,
         config,
-        featureEnablement
+        featureEnablement,
+        logger
       );
       // Only pass external repository token if a config file is going to be parsed by the CLI.
       let externalRepositoryToken: string | undefined;

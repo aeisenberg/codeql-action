@@ -1994,7 +1994,7 @@ export async function generateRegistries(
       .split(",")
       .map((s) => {
         const x = s.split("=");
-        x[1] = `${x[1].substring(0, 4)}...`;
+        x[1] = `${x[1].substring(0, 5)}...`;
         return `${x[0]}=${x[1]}`;
       })
       .join(",");

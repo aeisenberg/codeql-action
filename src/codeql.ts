@@ -618,11 +618,11 @@ export async function getCodeQLForCmd(
         }
       }
 
-      if (
-        await util.codeQlVersionAbove(this, CODEQL_VERSION_INIT_WITH_QLCONFIG)
-      ) {
-        extraArgs.push(`--qlconfig=${qlconfigFile}`);
-      }
+      // if (
+      //   await util.codeQlVersionAbove(this, CODEQL_VERSION_INIT_WITH_QLCONFIG)
+      // ) {
+      extraArgs.push(`--qlconfig-file=${qlconfigFile}`);
+      // }
       await runTool(
         cmd,
         [

@@ -108,6 +108,11 @@ export async function runInit(
   logger: Logger
 ): Promise<TracerConfig | undefined> {
   fs.mkdirSync(config.dbLocation, { recursive: true });
+  logger.info("2222222");
+  logger.info("2222222");
+  logger.info("2222222");
+  logger.info(registriesInput ?? "undefined");
+  logger.info("2222222");
 
   try {
     if (await codeQlVersionAbove(codeql, CODEQL_VERSION_NEW_TRACING)) {
@@ -118,11 +123,6 @@ export async function runInit(
       let registriesAuthTokens: string | undefined;
       let qlconfigFile: string | undefined;
       if (await util.useCodeScanningConfigInCli(codeql, featureEnablement)) {
-        logger.info("2222222");
-        logger.info("2222222");
-        logger.info("2222222");
-        logger.info(registriesInput ?? "undefined");
-        logger.info("2222222");
         ({ registriesAuthTokens, qlconfigFile } =
           await configUtils.generateRegistries(
             registriesInput,

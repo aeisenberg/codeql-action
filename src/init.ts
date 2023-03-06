@@ -118,6 +118,11 @@ export async function runInit(
       let registriesAuthTokens: string | undefined;
       let qlconfigFile: string | undefined;
       if (await util.useCodeScanningConfigInCli(codeql, featureEnablement)) {
+        logger.info("2222222");
+        logger.info("2222222");
+        logger.info("2222222");
+        logger.info(registriesInput ?? "undefined");
+        logger.info("2222222");
         ({ registriesAuthTokens, qlconfigFile } =
           await configUtils.generateRegistries(
             registriesInput,
@@ -125,6 +130,11 @@ export async function runInit(
             config.tempDir,
             logger
           ));
+        logger.info("33333");
+        logger.info("33333");
+        logger.info("33333");
+        logger.info(qlconfigFile ?? "undefined");
+        logger.info("33333");
       }
       await configUtils.wrapEnvironment(
         {

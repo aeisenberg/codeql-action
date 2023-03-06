@@ -1989,6 +1989,20 @@ export async function generateRegistries(
     registriesAuthTokens = registries
       .map((registry) => `${registry.url}=${registry.token}`)
       .join(",");
+
+    const reg = registriesAuthTokens
+      .split(",")
+      .map((s) => {
+        const x = s.split("=");
+        x[1] = `${x[1].substring(0, 4)}...`;
+        return `${x[0]}=${x[1]}`;
+      })
+      .join(",");
+    logger.info("11111111");
+    logger.info("11111111");
+    logger.info(qlconfigContents);
+    logger.info(reg);
+    logger.info("11111111");
   }
 
   if (typeof process.env.CODEQL_REGISTRIES_AUTH === "string") {
